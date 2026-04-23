@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type FC } from 'react'
-import GotoHome from '../components/ui/Buttons/GotoHome'
+import GoHomeBtn from '../components/ui/Buttons/GotoHome'
 
 const LOADING_TIMEOUT_MS = 5000
 
@@ -37,16 +37,16 @@ const LoadingScreen: FC = () => {
     <div className="flex h-screen w-screen flex-col items-center justify-center bg-black/30">
       <div className="relative mt-25 flex w-[90vw] items-center justify-center">
         {/* Outer Ring */}
-        <div className="h-24 w-24 animate-spin rounded-full border-4 border-transparent border-t-blue-500 border-b-purple-500"></div>
+        <div className="h-24 w-24 animate-spin rounded-full border-4 border-transparent border-t-[hsl(38,95%,62%)] border-b-[hsl(28,90%,45%)]"></div>
 
         {/* Inner Ring (Reverse Spin) */}
-        <div className="absolute h-16 w-16 animate-[spin_1.5s_linear_infinite_reverse] rounded-full border-4 border-transparent border-r-pink-500 border-l-cyan-400 opacity-70"></div>
+        <div className="absolute h-16 w-16 animate-[spin_1.5s_linear_infinite_reverse] rounded-full border-4 border-transparent border-r-[hsl(48,90%,65%)] border-l-[hsl(18,85%,55%)] opacity-70"></div>
 
         {/* Center Glow */}
         <div className="absolute h-4 w-4 animate-pulse rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)]"></div>
 
         {/* Text */}
-        <span className="absolute -bottom-12 w-full animate-pulse text-center text-sm font-medium tracking-wide text-blue-400">
+        <span className="absolute -bottom-12 w-full animate-pulse text-center font-['Montserrat'] text-sm font-medium tracking-wide text-[hsl(38,95%,62%)]">
           {displayTxt[infoKey]}
         </span>
       </div>
@@ -54,7 +54,7 @@ const LoadingScreen: FC = () => {
       <div
         className={`mt-25 ${count5Sec >= MAX_LOADING_COUNT ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
       >
-        <GotoHome />
+        <GoHomeBtn />
       </div>
     </div>
   )

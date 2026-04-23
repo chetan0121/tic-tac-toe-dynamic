@@ -1,16 +1,18 @@
 import { Link } from 'react-router-dom'
-import Routes from '../../../router/Routes'
+import Routes from '../../../router/AppRoutes'
 
-function GotoHome() {
+function GoHomeBtn() {
+  const btnTxt = 'Go to Home'
+
   return (
     <div>
-      <Link to={Routes.home} className={'m-0 h-auto w-auto p-0'}>
-        <button className="text-md transition-color rounded-xl border-[3px] border-blue-400 bg-transparent px-5 py-2 font-bold text-blue-400 duration-300 ease-in-out hover:border-blue-300 hover:bg-blue-600 hover:text-blue-200 active:scale-95 active:bg-blue-800">
-          Go to Home
+      <Link to={Routes.home.path} className="m-0 h-auto w-auto p-0">
+        <button className="transition-color rounded-xl border-[3px] border-[hsl(38,95%,62%)] bg-transparent px-5 py-2 font-['Patrick_Hand'] text-lg font-bold text-[hsl(38,95%,62%)] duration-300 ease-in-out hover:border-[hsl(45,100%,70%)] hover:bg-[hsl(38,95%,54%)] hover:text-black active:scale-95 active:bg-[hsl(38,95%,46%)] md:text-xl">
+          {btnTxt}
         </button>
       </Link>
     </div>
   )
 }
 
-export default GotoHome
+export default GoHomeBtn
