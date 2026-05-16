@@ -3,15 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import AppRoutes from '../../router/AppRoutes'
 
 function HomeHero() {
+  // Text of the Component
   const HEADING = 'Tic Tac Toe'
   const HEADING2 = '2.0'
   const DESCRIPTION =
     'The classic game reimagined. Experience strategic depth, and visually stunning gameplay.'
   const START_BTN = 'START'
 
+  // To Handle Navigation
   const navigate = useNavigate()
   const toGamePage = () => {
-    void navigate(AppRoutes.game.path)
+    void navigate(AppRoutes.gameMenu.path)
   }
 
   return (

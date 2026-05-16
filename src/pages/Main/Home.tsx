@@ -1,5 +1,5 @@
-import HomeHero from '../components/ui/HomeHero'
-import SettingBtn from '../components/ui/Settings'
+import HomeHero from '../../components/ui/HomeHero'
+import SettingBtn from '../../components/ui/Settings'
 
 function Home() {
   return (

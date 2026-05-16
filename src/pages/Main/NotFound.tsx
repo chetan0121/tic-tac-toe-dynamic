@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import GotoHome from '../components/ui/Buttons/GotoHome'
+import GotoHome from '../../components/ui/Buttons/GotoHome'
 
 const ErrorMsg = 'Oops! We can’t find this page'
 const ErrorDesc =
