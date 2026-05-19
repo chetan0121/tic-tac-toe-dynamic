@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import {
   GAME_MODES,
   GAME_MOVE_LIMITS,
@@ -6,7 +6,7 @@ import {
   type GameMode,
   type GameMoveLimit,
   type GameTimeControl,
-} from '../../shared/gameConstants'
+} from '../../constants/gameConstants'
 import { GameConfigContext, type GameConfigState } from './gameConfigContext'
 
 // Default config values.
@@ -29,6 +29,12 @@ export function GameConfigProvider({ children }: { children: ReactNode }) {
     }),
     [selectedMode, timeControl, moveLimit]
   )
+
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      console.log('currGame config state:', value.state)
+    }
+  }, [value.state])
 
   return <GameConfigContext.Provider value={value}>{children}</GameConfigContext.Provider>
 }

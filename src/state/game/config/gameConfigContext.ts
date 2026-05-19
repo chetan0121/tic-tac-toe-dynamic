@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import type { GameMode, GameMoveLimit, GameTimeControl } from '../../shared/gameConstants'
+import type { GameMode, GameMoveLimit, GameTimeControl } from '../../constants/gameConstants'
 
 // Selected options for a new match.
 export interface GameConfigState {

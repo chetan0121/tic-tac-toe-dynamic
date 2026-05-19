@@ -17,7 +17,7 @@ function HomeHero() {
   }
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center gap-10">
+    <div className="flex w-full flex-col items-center justify-center gap-10">
       {/* Head */}
       <div className="flex max-w-100 flex-col items-center justify-center gap-1">
         {/* Title */}

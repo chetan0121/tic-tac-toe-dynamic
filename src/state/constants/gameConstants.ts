@@ -1,10 +1,24 @@
-// Shared config options and types for game setup.
+// Shared option types and game setup constants.
 
-export interface GameConfigOption<T = number | string | null> {
+// Base value types for selectable options.
+export type OptionValue = string | number | null
+
+// Core option shape shared by dropdowns and config lists.
+export interface OptionItem<T extends OptionValue = OptionValue> {
   readonly value: T
   readonly label: string
   readonly description: string
 }
+
+// Selection contract for option pickers.
+export interface OptionSelection<T extends OptionValue = OptionValue> {
+  options: readonly OptionItem<T>[]
+  currentOption: T
+  selectOption: (value: T) => void
+}
+
+// Game setup options reuse the shared option shape.
+export type GameConfigOption<T extends OptionValue = OptionValue> = OptionItem<T>
 
 // A simple helper type to handle the "readonly array" part once.
 type ConfigList = readonly GameConfigOption[]

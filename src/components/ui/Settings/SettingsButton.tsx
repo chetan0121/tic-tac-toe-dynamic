@@ -10,7 +10,7 @@ function SettingsButton() {
       <button
         type="button"
         onClick={toggle}
-        className="group fixed top-2.5 left-2.5 z-40 flex h-10 w-10 items-center justify-center rounded-lg border-none bg-transparent"
+        className="group z-40 flex h-10 w-10 items-center justify-center rounded-lg border-none bg-transparent"
         aria-label="Open settings"
       >
         <Settings

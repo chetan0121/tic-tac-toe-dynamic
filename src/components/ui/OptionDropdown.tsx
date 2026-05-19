@@ -1,75 +1,74 @@
-import { useMemo } from 'react'
+import { useId, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Check, ChevronDown } from 'lucide-react'
-import { useClickOutsideClose } from '../../../hooks/useClickOutsideClose'
-import type { GameConfigOption } from '../../../state/shared/gameConstants'
+import type { OptionSelection, OptionValue } from '../../state/constants/gameConstants'
 
-const TEXT = {
-  modalTitle: 'Select Option',
-  listboxFallback: 'Options',
-}
-
-const hasContent = (value?: string) => Boolean(value && value.trim().length > 0)
-
-type OptionValue = string | number | null
-
-interface ConfigDropdownProps<T extends OptionValue> {
-  id: string
+// Optional copy overrides for labels and modal text.
+interface OptionDropdownText {
   label?: string
   helper?: string
-  value: T
-  options: readonly (Omit<GameConfigOption, 'value'> & { value: T })[]
-  onChange: (value: T) => void
   modalTitle?: string
   listboxLabel?: string
 }
 
-function ConfigDropdown<T extends OptionValue>({
-  id,
-  label,
-  helper,
-  value,
-  options,
-  onChange,
-  modalTitle,
-  listboxLabel,
-}: ConfigDropdownProps<T>) {
-  const { isOpen, toggle, close, ref } = useClickOutsideClose()
+// Public props for the OptionDropdown component.
+interface OptionDropdownProps<T extends OptionValue> {
+  selection: OptionSelection<T>
+  text?: OptionDropdownText
+}
 
+// Fallback copy when callers do not provide overrides.
+const DEFAULT_TEXT = {
+  modalTitle: 'Select Option',
+  listboxLabel: 'Options',
+}
+
+// Simple guard for non-empty optional strings.
+const hasText = (value?: string) => Boolean(value && value.trim().length > 0)
+
+function OptionDropdown<T extends OptionValue>({
+  selection,
+  text = {},
+}: OptionDropdownProps<T>) {
+  const buttonId = useId()
+  const [isOpen, setIsOpen] = useState(false)
+  const { options, currentOption, selectOption } = selection
+
+  const listboxLabel = text.listboxLabel ?? text.label ?? DEFAULT_TEXT.listboxLabel
+  const modalTitle = text.modalTitle ?? DEFAULT_TEXT.modalTitle
+
+  // Pick the current option, or fall back to the first option for display.
   const selectedOption = useMemo(
-    () => options.find(option => option.value === value) ?? options[0],
-    [options, value]
+    () => options.find(option => option.value === currentOption) ?? options[0],
+    [currentOption, options]
   )
 
   if (!selectedOption) {
     return null
   }
 
-  const handleSelect = (nextValue: T) => {
-    onChange(nextValue)
+  const close = () => setIsOpen(false)
+  const toggle = () => setIsOpen(open => !open)
+
+  const chooseOption = (value: T) => {
+    selectOption(value)
     close()
   }
 
-  const resolvedListboxLabel = listboxLabel ?? label ?? TEXT.listboxFallback
-  const resolvedModalTitle = modalTitle ?? TEXT.modalTitle
-
   return (
-    <div
-      ref={ref}
-      className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 shadow-inner shadow-black/20"
-    >
-      {label ? (
+    <div className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 shadow-inner shadow-black/20">
+      {hasText(text.label) ? (
         <span className="block text-left font-['Montserrat'] text-sm font-medium tracking-[0.28em] text-white/55 uppercase">
-          {label}
+          {text.label}
         </span>
       ) : null}
-      {hasContent(helper) ? (
-        <p className="mt-2 text-left text-sm text-white/55">{helper}</p>
+      {hasText(text.helper) ? (
+        <p className="mt-2 text-left text-sm text-white/55">{text.helper}</p>
       ) : null}
 
       <div className="relative mt-3">
         <button
-          id={id}
+          id={buttonId}
           type="button"
           onClick={toggle}
           aria-haspopup="listbox"
@@ -78,7 +77,7 @@ function ConfigDropdown<T extends OptionValue>({
         >
           <span className="flex min-w-0 flex-col">
             <span className="truncate font-medium text-white">{selectedOption.label}</span>
-            {hasContent(selectedOption.description) ? (
+            {hasText(selectedOption.description) ? (
               <span className="truncate text-sm text-white/55">
                 {selectedOption.description}
               </span>
@@ -95,27 +94,30 @@ function ConfigDropdown<T extends OptionValue>({
 
         {isOpen &&
           createPortal(
+            // Portal keeps the modal overlay above everything else.
             <div
               className="fixed inset-0 z-50 bg-black/55 px-4 py-6 backdrop-blur-[2px]"
               onClick={close}
+              onKeyDown={event => {
+                // Allow closing with Escape when the overlay is focused.
+                if (event.key === 'Escape') close()
+              }}
             >
               <div className="flex h-full items-center justify-center">
                 <div
                   className="w-full max-w-md overflow-hidden rounded-2xl border border-white/12 bg-linear-to-b from-[#22160D]/98 to-[#0C0805]/98 shadow-[0_24px_70px_rgba(0,0,0,0.6)] backdrop-blur-2xl"
+                  // Prevent inner clicks from closing the overlay.
                   onClick={event => event.stopPropagation()}
                 >
                   <div className="px-4 py-4">
                     <div className="relative max-h-[calc(100vh-10rem)] overflow-y-auto px-1 py-1">
                       <p className="px-3 pb-2 text-xs tracking-[0.35em] text-white/40 uppercase">
-                        {resolvedModalTitle}
+                        {modalTitle}
                       </p>
-                      <div
-                        role="listbox"
-                        aria-label={resolvedListboxLabel}
-                        className="space-y-2"
-                      >
+                      <div role="listbox" aria-label={listboxLabel} className="space-y-2">
+                        {/* Render the available options in the modal list. */}
                         {options.map(option => {
-                          const isSelected = option.value === value
+                          const isSelected = option.value === currentOption
 
                           return (
                             <button
@@ -123,7 +125,7 @@ function ConfigDropdown<T extends OptionValue>({
                               type="button"
                               role="option"
                               aria-selected={isSelected}
-                              onClick={() => handleSelect(option.value)}
+                              onClick={() => chooseOption(option.value)}
                               className={`flex w-full items-center justify-between gap-4 rounded-xl border px-4 py-3 text-left transition-all duration-200 ${
                                 isSelected
                                   ? 'border-[hsl(38,95%,60%)]/60 bg-linear-to-b from-[#FFD68A]/16 to-[#FFC36E]/8'
@@ -134,7 +136,7 @@ function ConfigDropdown<T extends OptionValue>({
                                 <span className="block truncate font-['Montserrat'] text-base text-white">
                                   {option.label}
                                 </span>
-                                {hasContent(option.description) ? (
+                                {hasText(option.description) ? (
                                   <span className="block truncate text-sm text-white/52">
                                     {option.description}
                                   </span>
@@ -166,4 +168,4 @@ function ConfigDropdown<T extends OptionValue>({
   )
 }
 
-export default ConfigDropdown
+export default OptionDropdown
