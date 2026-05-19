@@ -15,7 +15,7 @@ const AppRouter = () => {
               path={route.path}
               element={
                 <PageLayout>
-                  <route.Page />
+                  <route.page />
                 </PageLayout>
               }
             />

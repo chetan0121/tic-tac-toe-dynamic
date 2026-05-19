@@ -1,11 +1,11 @@
 import AppRouter from './router/AppRouter'
-import { GameProvider } from './state/game/GameState'
+import { GameConfigProvider } from './state/game/config/GameConfigState'
 
 function App() {
   return (
-    <GameProvider>
+    <GameConfigProvider>
       <AppRouter />
-    </GameProvider>
+    </GameConfigProvider>
   )
 }
 

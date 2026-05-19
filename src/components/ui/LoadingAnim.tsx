@@ -1,18 +1,42 @@
+import { useState, useEffect } from 'react'
+
+export type LoadingMessage = {
+  txt: string
+  keepTime: number
+}
+
 interface LoadingAnimProps {
-  count: number
-  messages?: Record<number, string>
+  messages?: LoadingMessage[]
+  onLastMessage?: () => void
 }
 
-const DEFAULT_LOADING_MESSAGES: Record<number, string> = {
-  0: 'Loading...',
-}
+const DEFAULT_LOADING_MESSAGES: LoadingMessage[] = [{ txt: 'Loading...', keepTime: 0 }]
 
-function LoadingAnim({ count, messages = DEFAULT_LOADING_MESSAGES }: LoadingAnimProps) {
-  const entries = Object.entries(messages)
-    .map(([key, value]) => [Number(key), value] as const)
-    .sort((left, right) => right[0] - left[0])
+export default function LoadingAnim({
+  messages = DEFAULT_LOADING_MESSAGES,
+  onLastMessage,
+}: LoadingAnimProps) {
+  const [currentIndex, setCurrentIndex] = useState(0)
 
-  const message = entries.find(([key]) => count >= key)?.[1] ?? DEFAULT_LOADING_MESSAGES[0]
+  useEffect(() => {
+    if (!messages || messages.length === 0) return
+
+    if (currentIndex >= messages.length - 1) {
+      onLastMessage?.()
+      return
+    }
+
+    const currentMessage = messages[currentIndex]
+    if (currentMessage.keepTime <= 0) return
+
+    const timer = setTimeout(() => {
+      setCurrentIndex(prev => prev + 1)
+    }, currentMessage.keepTime * 1000)
+
+    return () => clearTimeout(timer)
+  }, [currentIndex, messages, onLastMessage])
+
+  const message = messages[currentIndex]?.txt ?? 'Loading...'
 
   return (
     <div className="flex w-[90vw] flex-col items-center justify-center">
@@ -30,5 +54,3 @@ function LoadingAnim({ count, messages = DEFAULT_LOADING_MESSAGES }: LoadingAnim
     </div>
   )
 }
-
-export default LoadingAnim

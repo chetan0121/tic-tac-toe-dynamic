@@ -12,27 +12,27 @@ const GameConfigs = lazy(() => import('../pages/Game/GameConfigs'))
 const AppRoutes = {
   home: {
     path: '/',
-    Page: Home,
+    page: Home,
   },
-  game: {
-    path: '/game',
-    Page: GameBoard,
+  gameBoard: {
+    path: '/board',
+    page: GameBoard,
   },
   loading: {
     path: '/loading',
-    Page: LoadingScreen,
+    page: LoadingScreen,
   },
   gameMenu: {
     path: '/gamemanu',
-    Page: GameMenu,
+    page: GameMenu,
   },
   gameConfigs: {
     path: '/gameconfig',
-    Page: GameConfigs,
+    page: GameConfigs,
   },
   notFound: {
     path: '*',
-    Page: NotFoundPage,
+    page: NotFoundPage,
   },
 }
 
