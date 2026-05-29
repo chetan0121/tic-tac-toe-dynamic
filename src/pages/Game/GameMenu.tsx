@@ -18,12 +18,12 @@ function GameMenu() {
   }
 
   return (
-    <div className="flex w-full max-w-6xl flex-col gap-10 py-10">
+    <div className="flex h-full w-full max-w-6xl flex-col gap-10 py-10 pb-200 md:pb-0">
       <ConfigHeader title={TEXT.title} />
 
       <GameSetupPanel maxWidth="100%" />
 
-      <div className="self-start">
+      <div className="self-center md:self-baseline">
         <NextButton text={TEXT.buttons.startGame} onClick={startGame} />
       </div>
     </div>

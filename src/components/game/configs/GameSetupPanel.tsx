@@ -1,4 +1,5 @@
-import OptionDropdown from '../../ui/OptionDropdown'
+import OptionDropdown from '../../ui/MenuOptions/OptionDropdown'
+import OptionSpinner from '../../ui/MenuOptions/OptionSpinner'
 import { useGameSetupOptions } from '../../../hooks/useGameSetupOptions'
 import GameMenuGrid from './GameMenuGrid'
 
@@ -11,9 +12,15 @@ function GameSetupPanel({ maxWidth }: GameSetupPanelProps) {
 
   return (
     <GameMenuGrid maxWidth={maxWidth}>
-      {setupOptions.map(option => (
-        <OptionDropdown key={option.key} selection={option.selection} text={option.text} />
-      ))}
+      {setupOptions.map(option => {
+        if ('selection' in option) {
+          return <OptionDropdown {...option} key={option.key} />
+        } else if ('range' in option) {
+          return <OptionSpinner {...option} key={option.key} />
+        }
+
+        return null
+      })}
     </GameMenuGrid>
   )
 }

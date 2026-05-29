@@ -1,7 +1,6 @@
 import { createContext } from 'react'
-import type { GameMode, GameMoveLimit, GameTimeControl } from '../../constants/gameConstants'
+import type { GameMode, GameTimeControl, GameMoveLimit } from '../../constants/menuConstants'
 
-// Selected options for a new match.
 export interface GameConfigState {
   selectedMode: GameMode
   timeControl: GameTimeControl
@@ -17,5 +16,4 @@ export interface GameConfigContextValue {
   }
 }
 
-// Context used by provider + hook.
 export const GameConfigContext = createContext<GameConfigContextValue | undefined>(undefined)

@@ -7,7 +7,13 @@ import PageLayout from '../pages/PageLayout'
 const AppRouter = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<LoadingScreen />}>
+      <Suspense
+        fallback={
+          <PageLayout>
+            <LoadingScreen />
+          </PageLayout>
+        }
+      >
         <Routes>
           {Object.entries(AppRoutes).map(([key, route]) => (
             <Route

@@ -1,21 +1,7 @@
 import { useId, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Check, ChevronDown } from 'lucide-react'
-import type { OptionSelection, OptionValue } from '../../state/constants/gameConstants'
-
-// Optional copy overrides for labels and modal text.
-interface OptionDropdownText {
-  label?: string
-  helper?: string
-  modalTitle?: string
-  listboxLabel?: string
-}
-
-// Public props for the OptionDropdown component.
-interface OptionDropdownProps<T extends OptionValue> {
-  selection: OptionSelection<T>
-  text?: OptionDropdownText
-}
+import type { DropDownOptions } from '../../../hooks/useGameSetupOptions'
 
 // Fallback copy when callers do not provide overrides.
 const DEFAULT_TEXT = {
@@ -26,10 +12,7 @@ const DEFAULT_TEXT = {
 // Simple guard for non-empty optional strings.
 const hasText = (value?: string) => Boolean(value && value.trim().length > 0)
 
-function OptionDropdown<T extends OptionValue>({
-  selection,
-  text = {},
-}: OptionDropdownProps<T>) {
+function OptionDropdown({ selection, text }: DropDownOptions) {
   const buttonId = useId()
   const [isOpen, setIsOpen] = useState(false)
   const { options, currentOption, selectOption } = selection
@@ -50,7 +33,7 @@ function OptionDropdown<T extends OptionValue>({
   const close = () => setIsOpen(false)
   const toggle = () => setIsOpen(open => !open)
 
-  const chooseOption = (value: T) => {
+  const chooseOption = (value: (typeof selectedOption)['value']) => {
     selectOption(value)
     close()
   }

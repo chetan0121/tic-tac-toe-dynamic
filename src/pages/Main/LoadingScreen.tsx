@@ -12,7 +12,7 @@ const LoadingScreen: FC = () => {
   const [showHomeBtn, setShowHomeBtn] = useState(false)
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-14 bg-black/30 px-4">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-14">
       <LoadingAnim messages={loadingMessages} onLastMessage={() => setShowHomeBtn(true)} />
       <div
         className={`transition-opacity duration-300 ${showHomeBtn ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
